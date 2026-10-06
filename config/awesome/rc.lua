@@ -245,6 +245,14 @@ local function apply_theme()
     awful.spawn.with_shell("~/.config/LuminaHUD/start.sh")
 end
 
+-- Capture enregistrée dans ~/Pictures/Screenshots et copiée dans le presse-papiers.
+-- "-s -u -t 0" : zone tracée à la souris, sans curseur, sans sélection de fenêtre au clic.
+local function screenshot(options)
+    awful.spawn.with_shell(
+        "f=~/Pictures/Screenshots/\"$(date +'Screenshot from %Y-%m-%d %H-%M-%S').png\"; "
+        .. "maim " .. options .. " \"$f\" && xclip -selection clipboard -t image/png -i \"$f\"")
+end
+
 -- ===== Raccourcis globaux style i3 =====
 local globalkeys = gears.table.join(
     awful.key({ modkey }, "s", hotkeys_popup.show_help,
@@ -305,6 +313,13 @@ local globalkeys = gears.table.join(
         { description = "fond d'écran + thème suivant", group = "awesome" }),
     awful.key({ modkey, "Control" }, "w", function() rice.cycle(-1); apply_theme() end,
         { description = "fond d'écran + thème précédent", group = "awesome" }),
+
+    awful.key({}, "Print", function() screenshot("") end,
+        { description = "capture de l'écran", group = "launcher" }),
+    awful.key({ "Shift" }, "Print", function() screenshot("-s -u -t 0") end,
+        { description = "capture d'une zone", group = "launcher" }),
+    awful.key({ modkey, "Shift" }, "s", function() screenshot("-s -u -t 0") end,
+        { description = "capture d'une zone", group = "launcher" }),
 
     awful.key({ modkey }, "Tab", awful.tag.viewnext,
         { description = "tag suivant", group = "tag" }),
@@ -412,6 +427,20 @@ local function run_once(cmd)
         "pgrep -u $USER -fx '" .. cmd .. "' > /dev/null || (" .. cmd .. ")")
 end
 run_once("picom")
+
+-- L'heure et la date sont déjà sur le bureau (LuminaHUD) : la barre ne les affiche que
+-- lorsque des fenêtres recouvrent le bureau, pour ne pas les montrer deux fois.
+local function update_clock_visibility()
+    mytextclock.visible = #screen.primary.clients > 0
+end
+local function schedule_clock_visibility()
+    gears.timer.delayed_call(update_clock_visibility)
+end
+for _, signal in ipairs { "manage", "unmanage", "tagged", "untagged", "property::minimized" } do
+    client.connect_signal(signal, schedule_clock_visibility)
+end
+tag.connect_signal("property::selected", schedule_clock_visibility)
+schedule_clock_visibility()
 
 -- awesome.restart() (Mod+Shift+r) revient sinon sur le tag 1 :
 -- on note le tag affiché de chaque écran à la sortie et on le rouvre au démarrage.

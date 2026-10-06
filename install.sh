@@ -9,7 +9,7 @@ set -eu
 REPO="$(cd "$(dirname "$0")" && pwd)"
 CONFIG="${XDG_CONFIG_HOME:-$HOME/.config}"
 STAMP="$(date +%Y%m%d-%H%M%S)"
-PACKAGES="awesome picom rofi alacritty ttf-jetbrains-mono-nerd papirus-icon-theme python libpulse"
+PACKAGES="awesome picom rofi alacritty ttf-jetbrains-mono-nerd papirus-icon-theme python libpulse maim xclip"
 AUR_PACKAGES="luminahud-git"
 
 install_packages=1
@@ -67,6 +67,9 @@ echo "Fonds d'écran :"
 for wallpaper in "$REPO"/wallpapers/*; do
     link "$wallpaper" "$HOME/Pictures/Wallpapers/$(basename "$wallpaper")"
 done
+
+# rc.lua y enregistre les captures d'écran
+mkdir -p "$HOME/Pictures/Screenshots"
 
 if [ ! -e "$CONFIG/LuminaHUD/42.env" ]; then
     install -m 600 "$REPO/config/LuminaHUD/42.env.example" "$CONFIG/LuminaHUD/42.env"

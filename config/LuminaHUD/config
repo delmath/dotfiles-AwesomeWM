@@ -42,6 +42,8 @@ halo_accent=E9B94930
 shade=15131899
 track=FFFFFF20
 clear=00000000
+tear=C4E2FFFF
+tear_shade=34447CB0
 
 # 3 · néon : tubes roses et cyan, ombre bleu nuit
 [Theme_neon]
@@ -264,8 +266,8 @@ GlowSize=5
 
 [TextBlock_c_tear]
 When=env.LUMINA_THEME != 2 && env.LUMINA_THEME != 3
-Pos=27.40,49.63
-FRAMES=.|:|o|:\no|.\n:\n o|\n.\n :\n o|\n\n .\n :\n  o|\n\n\n .\n  :\n  o|\n\n\n\n  .\n  :\n   o|\n\n\n\n\n  .\n   :\n   o|\n\n\n\n\n\n   .\n   :\n    o|\n\n\n\n\n\n\n   .\n    :\n    o|\n\n\n\n\n\n\n\n    .\n    :\n     o|\n\n\n\n\n\n\n\n\n    .\n     :\n     o|\n\n\n\n\n\n\n\n\n\n     .\n     :\n      o|\n\n\n\n\n\n\n\n\n\n\n     .\n      :\n      o|\n\n\n\n\n\n\n\n\n\n\n\n      .\n      :\n       o|\n\n\n\n\n\n\n\n\n\n\n\n\n      .\n       :\n       o|\n\n\n\n\n\n\n\n\n\n\n\n\n\n       .\n       :\n        o|\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n       .\n\n        o|\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n        o|\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n        .
+Pos=31.30,46.85
+FRAMES=.|:|o|:\no|.\n:\n o|\n.\n :\n o|\n\n .\n :\n  o|\n\n\n .\n  :\n  o|\n\n\n\n  .\n  :\n   o|\n\n\n\n\n  .\n   :\n   o|\n\n\n\n\n\n   .\n   :\n   o|\n\n\n\n\n\n\n   .\n   :\n    o|\n\n\n\n\n\n\n\n   .\n    :\n    o|\n\n\n\n\n\n\n\n\n    .\n    :\n     o|\n\n\n\n\n\n\n\n\n\n    .\n     :\n     o|\n\n\n\n\n\n\n\n\n\n\n     .\n     :\n      o|\n\n\n\n\n\n\n\n\n\n\n\n     .\n      :\n      o|\n\n\n\n\n\n\n\n\n\n\n\n\n      .\n      :\n      o|\n\n\n\n\n\n\n\n\n\n\n\n\n\n      .\n      :\n       o|\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n      .\n       :\n       o|\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n       .\n       :\n        o|\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n       .\n        :\n        o|\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n        .\n        :\n         o|\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n        .\n\n         o|\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n         o|\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n         .
 FrameTime=0.17
 LoopPause=4
 Font=JetBrainsMonoNerdFont-Regular
@@ -417,22 +419,22 @@ BgColor=@ink_track
 
 # ----------------------------------------------------------------------
 # 2 · lune
-# Horloge fine dans l'ombre à gauche, infos sur le mur de droite, et une larme pour Lucy.
+# Horloge fine dans l'ombre à gauche, infos sur le mur de droite, et une petite larme pour Lucy.
 # ----------------------------------------------------------------------
 
-[ImageBlock_l_tear]
+[TextBlock_l_tear]
 When=env.LUMINA_THEME == 2
-Pos=46.72,45.83
-Anchor=top
-Path=~/.config/LuminaHUD/images/tear.png
-Size=7,11
-
-[ImageBlock_l_tear_falling]
-When=env.LUMINA_THEME == 2
-Pos=46.77,49.07
-Anchor=top
-Path=~/.config/LuminaHUD/images/tear.png
-Size=5,8
+Pos=45.00,41.85
+# Tracé complet (une seule image), pour le retoucher : remplace FRAMES par cette ligne et mets LoopPause=0
+#FRAMES=\n        .\n       .\n      .\n      .\n    .\n  .\n  o\n  o\n  .
+FRAMES=\n        .|\n        :|\n        o|\n        .\n       o|\n\n       .\n      o|\n\n\n      .\n      o|\n\n\n\n      .\n    o|\n\n\n\n\n    .\n  o|\n\n\n\n\n\n  .\n  o|\n\n\n\n\n\n\n  .\n  o|\n\n\n\n\n\n\n\n\n  .
+LoopPause=6
+FrameTime=0.25
+Font=JetBrainsMonoNerdFont-Regular
+Size=8
+Color=@tear
+GlowColor=@tear_shade
+GlowSize=1
 
 [TextBlock_l_clock]
 When=env.LUMINA_THEME == 2
