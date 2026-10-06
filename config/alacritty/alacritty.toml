@@ -1,0 +1,12 @@
+[general]
+# couleurs générées par awesome (~/.config/awesome/rice.lua), une palette par fond d'écran
+import = ["~/.config/alacritty/theme.toml"]
+
+[window]
+opacity = 0.82
+padding = { x = 10, y = 10 }
+
+[[keyboard.bindings]]
+key = "Return"
+mods = "Shift"
+chars = "\u001B\r"

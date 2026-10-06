@@ -1,0 +1,8 @@
+# secrets
+42.env
+# générés par rice.lua à chaque changement de thème
+config/alacritty/theme.toml
+config/rofi/colors.rasi
+# sauvegardes
+*.bak
+*.bak[0-9]*

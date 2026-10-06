@@ -1,0 +1,67 @@
+/* ~/.config/rofi/config.rasi — couleurs dans colors.rasi, générées par awesome (rice.lua) */
+
+configuration {
+    modi: "drun,run,window";
+    show-icons: true;
+    icon-theme: "Papirus-Dark";
+    drun-display-format: "{name}";
+    display-drun: "  Apps";
+    display-run: "  Run";
+    display-window: "  Win";
+}
+
+@import "colors.rasi"
+
+* {
+    background-color: transparent;
+    text-color: @text;
+}
+
+window {
+    transparency: "real";
+    background-color: @base;
+    border: 2px;
+    border-color: @accent;
+    border-radius: 14px;
+    width: 600px;
+    location: center;
+}
+
+mainbox { padding: 12px; }
+
+inputbar {
+    background-color: @mantle;
+    border-radius: 10px;
+    padding: 10px 14px;
+    spacing: 10px;
+    children: [ prompt, entry ];
+}
+
+prompt { text-color: @accent; }
+entry  { placeholder: "Rechercher…"; placeholder-color: @subtext; }
+
+listview {
+    lines: 8;
+    spacing: 4px;
+    padding: 10px 0px 0px 0px;
+    scrollbar: false;
+}
+
+element {
+    padding: 8px 12px;
+    border-radius: 8px;
+    spacing: 10px;
+}
+/* rofi 2 colore les lignes par état : on neutralise tout sauf la sélection */
+element normal.normal, element alternate.normal,
+element normal.active, element alternate.active,
+element normal.urgent, element alternate.urgent {
+    background-color: transparent;
+    text-color: @text;
+}
+element selected.normal, element selected.active, element selected.urgent {
+    background-color: @surface;
+    text-color: @accent2;
+}
+element-icon { size: 22px; background-color: transparent; }
+element-text { vertical-align: 0.5; background-color: transparent; text-color: inherit; }

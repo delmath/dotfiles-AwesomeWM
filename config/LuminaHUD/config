@@ -1,0 +1,1091 @@
+# LuminaHUD — un HUD par fond d'écran de ~/Pictures/Wallpapers, pour un écran 1920x1080.
+#
+# Le thème suit LUMINA_THEME (1 casque, 2 lune, 3 néon), l'index du rice awesome :
+# le HUD est lancé par ~/.config/LuminaHUD/start.sh. Sans variable, c'est le thème 1.
+# Les données viennent de scripts/hud.py (météo, ISS, lancements, crypto, 42).
+#
+# Pas de panneaux : le texte est posé dans l'image, avec un halo (GlowColor / GlowSize)
+# aux couleurs de la scène pour rester lisible.
+
+[Settings]
+Monitor=primary
+
+# 1 · casque : blanc et jaune de la veste, halo du liseré bleu de la combinaison, encre sur le blanc
+[Theme_casque]
+text=E6E8F5FF
+sub=9AA0C4FF
+accent=F5D51EFF
+halo=5B5BFFB0
+halo_accent=F5D51E40
+shade=05061299
+ink=1D2244E6
+ink_sub=4A5080E6
+ink_title=4A44C8FF
+ink_track=1D224430
+track=FFFFFF22
+clear=00000000
+# (clés du thème néon : chaque clé utilisée par un bloc doit exister dans le thème de base)
+accent2=7FE3C4FF
+core=E6E8F5FF
+halo2=7FE3C490
+tear=D8F2FFF0
+tear_shade=2A3470A0
+
+# 2 · lune : lumière de la baie sur les murs, or des confettis
+[Theme_lune]
+When=env.LUMINA_THEME == 2
+text=E9E6EED8
+sub=A39DAED0
+accent=E9B949F0
+halo=FFFFFF30
+halo_accent=E9B94930
+shade=15131899
+track=FFFFFF20
+clear=00000000
+
+# 3 · néon : tubes roses et cyan, ombre bleu nuit
+[Theme_neon]
+When=env.LUMINA_THEME == 3
+text=E4E0FFFF
+sub=B4ACE6FF
+accent=FF9CF2FF
+accent2=A8ECFFFF
+core=FFE6FCFF
+halo=E06CFFD0
+halo_accent=E06CFF90
+halo2=5FD0FF90
+shade=0C0A22C0
+track=FFFFFF26
+clear=00000000
+
+# ----------------------------------------------------------------------
+# 1 · casque
+# Horloge, météo et orbite dans l'espace à droite ; 42 et système imprimés sur la combinaison.
+# ----------------------------------------------------------------------
+
+[TextBlock_c_clock]
+When=env.LUMINA_THEME != 2 && env.LUMINA_THEME != 3
+Pos=98.12,4.07
+Anchor=top-right
+BASH=~/.config/LuminaHUD/scripts/hud.py time
+Refresh=5
+Font=JetBrainsMonoNerdFont-ExtraBold
+Size=112
+Color=@text
+GlowColor=@halo
+GlowSize=14
+
+[TextBlock_c_date]
+When=env.LUMINA_THEME != 2 && env.LUMINA_THEME != 3
+Pos=98.12,16.31
+Anchor=top-right
+BASH=~/.config/LuminaHUD/scripts/hud.py date
+Refresh=60
+Font=JetBrainsMonoNerdFont-Medium
+Size=24
+Color=@accent
+GlowColor=@halo_accent
+GlowSize=8
+
+[TextBlock_c_weather]
+When=env.LUMINA_THEME != 2 && env.LUMINA_THEME != 3
+Pos=98.12,21.13
+Anchor=top-right
+BASH=~/.config/LuminaHUD/scripts/hud.py weather_now
+Refresh=300
+Font=JetBrainsMonoNerdFont-Medium
+Size=38
+Color=@text
+GlowColor=@shade
+GlowSize=5
+
+[TextBlock_c_weather_desc]
+When=env.LUMINA_THEME != 2 && env.LUMINA_THEME != 3
+Pos=98.12,26.68
+Anchor=top-right
+BASH=~/.config/LuminaHUD/scripts/hud.py weather_desc
+Refresh=300
+Font=JetBrainsMonoNerdFont-Regular
+Size=16
+Color=@text
+GlowColor=@shade
+GlowSize=5
+
+[TextBlock_c_weather_detail]
+When=env.LUMINA_THEME != 2 && env.LUMINA_THEME != 3
+Pos=98.12,29.09
+Anchor=top-right
+BASH=~/.config/LuminaHUD/scripts/hud.py weather_detail
+Refresh=300
+Font=JetBrainsMonoNerdFont-Regular
+Size=16
+Color=@sub
+GlowColor=@shade
+GlowSize=5
+
+[TextBlock_c_weather_sun]
+When=env.LUMINA_THEME != 2 && env.LUMINA_THEME != 3
+Pos=98.12,31.50
+Anchor=top-right
+BASH=~/.config/LuminaHUD/scripts/hud.py weather_sun
+Refresh=3600
+Font=JetBrainsMonoNerdFont-Regular
+Size=16
+Color=@sub
+GlowColor=@shade
+GlowSize=5
+
+[ButtonBlock_c_forecast_1]
+When=env.LUMINA_THEME != 2 && env.LUMINA_THEME != 3 && var.forecast == 0
+Pos=97.50,35.20
+Anchor=top-right
+LABEL=  prévisions
+TargetVar=forecast
+Action=set
+Modifier=1
+Size=10,5
+Font=JetBrainsMonoNerdFont-Regular
+FontSize=14
+Color=@sub
+HoverColor=@accent
+BgColor=@clear
+HoverBgColor=@track
+
+[ButtonBlock_c_forecast_0]
+When=env.LUMINA_THEME != 2 && env.LUMINA_THEME != 3 && var.forecast == 1
+Pos=97.50,35.20
+Anchor=top-right
+LABEL=  prévisions
+TargetVar=forecast
+Action=set
+Modifier=0
+Size=10,5
+Font=JetBrainsMonoNerdFont-Regular
+FontSize=14
+Color=@sub
+HoverColor=@accent
+BgColor=@clear
+HoverBgColor=@track
+
+[TextBlock_c_forecast_day1]
+When=env.LUMINA_THEME != 2 && env.LUMINA_THEME != 3 && var.forecast == 1
+Pos=98.12,38.16
+Anchor=top-right
+BASH=~/.config/LuminaHUD/scripts/hud.py weather_day1
+Refresh=600
+Font=JetBrainsMonoNerdFont-Regular
+Size=15
+Color=@text
+GlowColor=@shade
+GlowSize=5
+
+[TextBlock_c_forecast_day2]
+When=env.LUMINA_THEME != 2 && env.LUMINA_THEME != 3 && var.forecast == 1
+Pos=98.12,40.29
+Anchor=top-right
+BASH=~/.config/LuminaHUD/scripts/hud.py weather_day2
+Refresh=600
+Font=JetBrainsMonoNerdFont-Regular
+Size=15
+Color=@text
+GlowColor=@shade
+GlowSize=5
+
+[TextBlock_c_forecast_day3]
+When=env.LUMINA_THEME != 2 && env.LUMINA_THEME != 3 && var.forecast == 1
+Pos=98.12,42.42
+Anchor=top-right
+BASH=~/.config/LuminaHUD/scripts/hud.py weather_day3
+Refresh=600
+Font=JetBrainsMonoNerdFont-Regular
+Size=15
+Color=@text
+GlowColor=@shade
+GlowSize=5
+
+[TextBlock_c_orbit_title]
+When=env.LUMINA_THEME != 2 && env.LUMINA_THEME != 3
+Pos=98.12,45.85
+Anchor=top-right
+TEXT=ORBITE
+Font=JetBrainsMonoNerdFont-Bold
+Size=14
+Color=@accent
+GlowColor=@halo_accent
+GlowSize=6
+
+[TextBlock_c_iss]
+When=env.LUMINA_THEME != 2 && env.LUMINA_THEME != 3
+Pos=98.12,48.26
+Anchor=top-right
+BASH=~/.config/LuminaHUD/scripts/hud.py iss
+Refresh=30
+Font=JetBrainsMonoNerdFont-Regular
+Size=15
+Color=@text
+GlowColor=@shade
+GlowSize=5
+
+[TextBlock_c_iss_detail]
+When=env.LUMINA_THEME != 2 && env.LUMINA_THEME != 3
+Pos=98.12,50.48
+Anchor=top-right
+BASH=~/.config/LuminaHUD/scripts/hud.py iss_detail
+Refresh=30
+Font=JetBrainsMonoNerdFont-Regular
+Size=15
+Color=@sub
+GlowColor=@shade
+GlowSize=5
+
+[TextBlock_c_launch]
+When=env.LUMINA_THEME != 2 && env.LUMINA_THEME != 3
+Pos=98.12,52.70
+Anchor=top-right
+BASH=~/.config/LuminaHUD/scripts/hud.py launch
+Refresh=600
+Font=JetBrainsMonoNerdFont-Regular
+Size=15
+Color=@text
+GlowColor=@shade
+GlowSize=5
+
+[TextBlock_c_launch_in]
+When=env.LUMINA_THEME != 2 && env.LUMINA_THEME != 3
+Pos=98.12,54.92
+Anchor=top-right
+BASH=~/.config/LuminaHUD/scripts/hud.py launch_in
+Refresh=60
+Font=JetBrainsMonoNerdFont-Regular
+Size=15
+Color=@sub
+GlowColor=@shade
+GlowSize=5
+
+[TextBlock_c_tear]
+When=env.LUMINA_THEME != 2 && env.LUMINA_THEME != 3
+Pos=27.40,49.63
+FRAMES=.|:|o|:\no|.\n:\n o|\n.\n :\n o|\n\n .\n :\n  o|\n\n\n .\n  :\n  o|\n\n\n\n  .\n  :\n   o|\n\n\n\n\n  .\n   :\n   o|\n\n\n\n\n\n   .\n   :\n    o|\n\n\n\n\n\n\n   .\n    :\n    o|\n\n\n\n\n\n\n\n    .\n    :\n     o|\n\n\n\n\n\n\n\n\n    .\n     :\n     o|\n\n\n\n\n\n\n\n\n\n     .\n     :\n      o|\n\n\n\n\n\n\n\n\n\n\n     .\n      :\n      o|\n\n\n\n\n\n\n\n\n\n\n\n      .\n      :\n       o|\n\n\n\n\n\n\n\n\n\n\n\n\n      .\n       :\n       o|\n\n\n\n\n\n\n\n\n\n\n\n\n\n       .\n       :\n        o|\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n       .\n\n        o|\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n        o|\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n        .
+FrameTime=0.17
+LoopPause=4
+Font=JetBrainsMonoNerdFont-Regular
+Size=16
+Color=@tear
+GlowColor=@tear_shade
+GlowSize=2
+
+[TextBlock_c_ft_title]
+When=env.LUMINA_THEME != 2 && env.LUMINA_THEME != 3
+Pos=66.04,82.04
+TEXT=42 LYON
+Font=JetBrainsMonoNerdFont-Bold
+Size=14
+Color=@ink_title
+
+[TextBlock_c_ft_seat]
+When=env.LUMINA_THEME != 2 && env.LUMINA_THEME != 3
+Pos=79.06,82.04
+Anchor=top-right
+BASH=~/.config/LuminaHUD/scripts/hud.py ft_seat
+Refresh=3600
+Font=JetBrainsMonoNerdFont-Regular
+Size=14
+Color=@ink_sub
+
+[TextBlock_c_ft_level]
+When=env.LUMINA_THEME != 2 && env.LUMINA_THEME != 3
+Pos=66.04,84.44
+BASH=~/.config/LuminaHUD/scripts/hud.py ft_level
+Refresh=300
+Font=JetBrainsMonoNerdFont-Medium
+Size=16
+Color=@ink
+
+[BarBlock_c_ft_level_bar]
+When=env.LUMINA_THEME != 2 && env.LUMINA_THEME != 3
+Pos=66.67,87.78
+Anchor=left
+BASH=~/.config/LuminaHUD/scripts/hud.py ft_level_pct
+Refresh=300
+Size=226,3
+Color=@ink_title
+BgColor=@ink_track
+
+[TextBlock_c_ft_stats]
+When=env.LUMINA_THEME != 2 && env.LUMINA_THEME != 3
+Pos=66.04,88.33
+BASH=~/.config/LuminaHUD/scripts/hud.py ft_stats
+Refresh=300
+Font=JetBrainsMonoNerdFont-Regular
+Size=15
+Color=@ink
+
+[TextBlock_c_ft_logtime]
+When=env.LUMINA_THEME != 2 && env.LUMINA_THEME != 3
+Pos=66.04,90.56
+BASH=~/.config/LuminaHUD/scripts/hud.py ft_logtime
+Refresh=300
+Font=JetBrainsMonoNerdFont-Regular
+Size=15
+Color=@ink
+
+[TextBlock_c_ft_project]
+When=env.LUMINA_THEME != 2 && env.LUMINA_THEME != 3
+Pos=66.04,92.78
+BASH=~/.config/LuminaHUD/scripts/hud.py ft_project
+Refresh=300
+Font=JetBrainsMonoNerdFont-Regular
+Size=15
+Color=@ink_sub
+
+[TextBlock_c_ft_event]
+When=env.LUMINA_THEME != 2 && env.LUMINA_THEME != 3
+Pos=66.04,95.00
+BASH=~/.config/LuminaHUD/scripts/hud.py ft_event
+Refresh=300
+Font=JetBrainsMonoNerdFont-Regular
+Size=15
+Color=@ink_sub
+
+[TextBlock_c_sys_title]
+When=env.LUMINA_THEME != 2 && env.LUMINA_THEME != 3
+Pos=80.21,84.44
+TEXT=SYSTÈME
+Font=JetBrainsMonoNerdFont-Bold
+Size=14
+Color=@ink_title
+
+[TextBlock_c_cpu]
+When=env.LUMINA_THEME != 2 && env.LUMINA_THEME != 3
+Pos=80.21,88.15
+Anchor=left
+BASH=~/.config/LuminaHUD/scripts/hud.py cpu_line
+Refresh=5
+Font=JetBrainsMonoNerdFont-Regular
+Size=15
+Color=@ink
+
+[BarBlock_c_cpu_bar]
+When=env.LUMINA_THEME != 2 && env.LUMINA_THEME != 3
+Pos=86.35,88.15
+Anchor=left
+BASH=~/.config/LuminaHUD/scripts/hud.py cpu
+Refresh=5
+Size=40,3
+Color=@ink_title
+BgColor=@ink_track
+
+[TextBlock_c_ram]
+When=env.LUMINA_THEME != 2 && env.LUMINA_THEME != 3
+Pos=80.21,90.56
+Anchor=left
+BASH=~/.config/LuminaHUD/scripts/hud.py ram_line
+Refresh=5
+Font=JetBrainsMonoNerdFont-Regular
+Size=15
+Color=@ink
+
+[BarBlock_c_ram_bar]
+When=env.LUMINA_THEME != 2 && env.LUMINA_THEME != 3
+Pos=86.35,90.56
+Anchor=left
+BASH=~/.config/LuminaHUD/scripts/hud.py ram
+Refresh=5
+Size=40,3
+Color=@ink_title
+BgColor=@ink_track
+
+[TextBlock_c_disk]
+When=env.LUMINA_THEME != 2 && env.LUMINA_THEME != 3
+Pos=80.21,92.96
+Anchor=left
+BASH=~/.config/LuminaHUD/scripts/hud.py disk_line
+Refresh=120
+Font=JetBrainsMonoNerdFont-Regular
+Size=15
+Color=@ink
+
+[BarBlock_c_disk_bar]
+When=env.LUMINA_THEME != 2 && env.LUMINA_THEME != 3
+Pos=86.35,92.96
+Anchor=left
+BASH=~/.config/LuminaHUD/scripts/hud.py disk
+Refresh=120
+Size=40,3
+Color=@ink_title
+BgColor=@ink_track
+
+# ----------------------------------------------------------------------
+# 2 · lune
+# Horloge fine dans l'ombre à gauche, infos sur le mur de droite, et une larme pour Lucy.
+# ----------------------------------------------------------------------
+
+[ImageBlock_l_tear]
+When=env.LUMINA_THEME == 2
+Pos=46.72,45.83
+Anchor=top
+Path=~/.config/LuminaHUD/images/tear.png
+Size=7,11
+
+[ImageBlock_l_tear_falling]
+When=env.LUMINA_THEME == 2
+Pos=46.77,49.07
+Anchor=top
+Path=~/.config/LuminaHUD/images/tear.png
+Size=5,8
+
+[TextBlock_l_clock]
+When=env.LUMINA_THEME == 2
+Pos=2.29,5.19
+BASH=~/.config/LuminaHUD/scripts/hud.py time
+Refresh=5
+Font=JetBrainsMonoNerdFont-ExtraLight
+Size=120
+Color=@text
+GlowColor=@halo
+GlowSize=16
+
+[TextBlock_l_date]
+When=env.LUMINA_THEME == 2
+Pos=2.29,18.30
+BASH=~/.config/LuminaHUD/scripts/hud.py date
+Refresh=60
+Font=JetBrainsMonoNerdFont-Medium
+Size=24
+Color=@accent
+GlowColor=@halo_accent
+GlowSize=8
+
+[TextBlock_l_weather]
+When=env.LUMINA_THEME == 2
+Pos=2.29,23.11
+BASH=~/.config/LuminaHUD/scripts/hud.py weather_now
+Refresh=300
+Font=JetBrainsMonoNerdFont-Medium
+Size=38
+Color=@text
+GlowColor=@shade
+GlowSize=5
+
+[TextBlock_l_weather_desc]
+When=env.LUMINA_THEME == 2
+Pos=2.29,28.67
+BASH=~/.config/LuminaHUD/scripts/hud.py weather_desc
+Refresh=300
+Font=JetBrainsMonoNerdFont-Regular
+Size=16
+Color=@text
+GlowColor=@shade
+GlowSize=5
+
+[TextBlock_l_weather_detail]
+When=env.LUMINA_THEME == 2
+Pos=2.29,31.07
+BASH=~/.config/LuminaHUD/scripts/hud.py weather_detail
+Refresh=300
+Font=JetBrainsMonoNerdFont-Regular
+Size=16
+Color=@sub
+GlowColor=@shade
+GlowSize=5
+
+[TextBlock_l_weather_sun]
+When=env.LUMINA_THEME == 2
+Pos=2.29,33.48
+BASH=~/.config/LuminaHUD/scripts/hud.py weather_sun
+Refresh=3600
+Font=JetBrainsMonoNerdFont-Regular
+Size=16
+Color=@sub
+GlowColor=@shade
+GlowSize=5
+
+[ButtonBlock_l_forecast_1]
+When=env.LUMINA_THEME == 2 && var.forecast == 0
+Pos=2.92,37.19
+LABEL=  prévisions
+TargetVar=forecast
+Action=set
+Modifier=1
+Size=10,5
+Font=JetBrainsMonoNerdFont-Regular
+FontSize=14
+Color=@sub
+HoverColor=@accent
+BgColor=@clear
+HoverBgColor=@track
+
+[ButtonBlock_l_forecast_0]
+When=env.LUMINA_THEME == 2 && var.forecast == 1
+Pos=2.92,37.19
+LABEL=  prévisions
+TargetVar=forecast
+Action=set
+Modifier=0
+Size=10,5
+Font=JetBrainsMonoNerdFont-Regular
+FontSize=14
+Color=@sub
+HoverColor=@accent
+BgColor=@clear
+HoverBgColor=@track
+
+[TextBlock_l_forecast_day1]
+When=env.LUMINA_THEME == 2 && var.forecast == 1
+Pos=2.29,40.15
+BASH=~/.config/LuminaHUD/scripts/hud.py weather_day1
+Refresh=600
+Font=JetBrainsMonoNerdFont-Regular
+Size=15
+Color=@text
+GlowColor=@shade
+GlowSize=5
+
+[TextBlock_l_forecast_day2]
+When=env.LUMINA_THEME == 2 && var.forecast == 1
+Pos=2.29,42.28
+BASH=~/.config/LuminaHUD/scripts/hud.py weather_day2
+Refresh=600
+Font=JetBrainsMonoNerdFont-Regular
+Size=15
+Color=@text
+GlowColor=@shade
+GlowSize=5
+
+[TextBlock_l_forecast_day3]
+When=env.LUMINA_THEME == 2 && var.forecast == 1
+Pos=2.29,44.41
+BASH=~/.config/LuminaHUD/scripts/hud.py weather_day3
+Refresh=600
+Font=JetBrainsMonoNerdFont-Regular
+Size=15
+Color=@text
+GlowColor=@shade
+GlowSize=5
+
+[TextBlock_l_moon_title]
+When=env.LUMINA_THEME == 2
+Pos=84.90,13.89
+TEXT=LUNE
+Font=JetBrainsMonoNerdFont-Bold
+Size=14
+Color=@accent
+GlowColor=@halo_accent
+GlowSize=6
+
+[TextBlock_l_moon]
+When=env.LUMINA_THEME == 2
+Pos=84.90,16.30
+BASH=~/.config/LuminaHUD/scripts/hud.py moon
+Refresh=3600
+Font=JetBrainsMonoNerdFont-Medium
+Size=16
+Color=@text
+GlowColor=@shade
+GlowSize=5
+
+[TextBlock_l_moon_light]
+When=env.LUMINA_THEME == 2
+Pos=84.90,18.70
+BASH=~/.config/LuminaHUD/scripts/hud.py moon_light
+Refresh=3600
+Font=JetBrainsMonoNerdFont-Regular
+Size=15
+Color=@sub
+GlowColor=@shade
+GlowSize=5
+
+[TextBlock_l_ft_title]
+When=env.LUMINA_THEME == 2
+Pos=84.90,23.33
+TEXT=42 LYON
+Font=JetBrainsMonoNerdFont-Bold
+Size=14
+Color=@accent
+GlowColor=@halo_accent
+GlowSize=6
+
+[TextBlock_l_ft_seat]
+When=env.LUMINA_THEME == 2
+Pos=98.12,23.33
+Anchor=top-right
+BASH=~/.config/LuminaHUD/scripts/hud.py ft_seat
+Refresh=3600
+Font=JetBrainsMonoNerdFont-Regular
+Size=14
+Color=@sub
+GlowColor=@shade
+GlowSize=5
+
+[TextBlock_l_ft_level]
+When=env.LUMINA_THEME == 2
+Pos=84.90,25.74
+BASH=~/.config/LuminaHUD/scripts/hud.py ft_level
+Refresh=300
+Font=JetBrainsMonoNerdFont-Medium
+Size=16
+Color=@text
+GlowColor=@shade
+GlowSize=5
+
+[BarBlock_l_ft_level_bar]
+When=env.LUMINA_THEME == 2
+Pos=85.52,29.07
+Anchor=left
+BASH=~/.config/LuminaHUD/scripts/hud.py ft_level_pct
+Refresh=300
+Size=230,3
+Color=@accent
+BgColor=@track
+
+[TextBlock_l_ft_stats]
+When=env.LUMINA_THEME == 2
+Pos=84.90,29.63
+BASH=~/.config/LuminaHUD/scripts/hud.py ft_stats
+Refresh=300
+Font=JetBrainsMonoNerdFont-Regular
+Size=15
+Color=@text
+GlowColor=@shade
+GlowSize=5
+
+[TextBlock_l_ft_logtime]
+When=env.LUMINA_THEME == 2
+Pos=84.90,31.85
+BASH=~/.config/LuminaHUD/scripts/hud.py ft_logtime
+Refresh=300
+Font=JetBrainsMonoNerdFont-Regular
+Size=15
+Color=@text
+GlowColor=@shade
+GlowSize=5
+
+[TextBlock_l_ft_project]
+When=env.LUMINA_THEME == 2
+Pos=84.90,34.07
+BASH=~/.config/LuminaHUD/scripts/hud.py ft_project
+Refresh=300
+Font=JetBrainsMonoNerdFont-Regular
+Size=15
+Color=@sub
+GlowColor=@shade
+GlowSize=5
+
+[TextBlock_l_ft_event]
+When=env.LUMINA_THEME == 2
+Pos=84.90,36.30
+BASH=~/.config/LuminaHUD/scripts/hud.py ft_event
+Refresh=300
+Font=JetBrainsMonoNerdFont-Regular
+Size=15
+Color=@sub
+GlowColor=@shade
+GlowSize=5
+
+[TextBlock_l_sys_title]
+When=env.LUMINA_THEME == 2
+Pos=84.90,40.74
+TEXT=SYSTÈME
+Font=JetBrainsMonoNerdFont-Bold
+Size=14
+Color=@accent
+GlowColor=@halo_accent
+GlowSize=6
+
+[TextBlock_l_cpu]
+When=env.LUMINA_THEME == 2
+Pos=84.90,44.44
+Anchor=left
+BASH=~/.config/LuminaHUD/scripts/hud.py cpu_line
+Refresh=5
+Font=JetBrainsMonoNerdFont-Regular
+Size=15
+Color=@text
+GlowColor=@shade
+GlowSize=5
+
+[BarBlock_l_cpu_bar]
+When=env.LUMINA_THEME == 2
+Pos=91.04,44.44
+Anchor=left
+BASH=~/.config/LuminaHUD/scripts/hud.py cpu
+Refresh=5
+Size=124,3
+Color=@accent
+BgColor=@track
+
+[TextBlock_l_ram]
+When=env.LUMINA_THEME == 2
+Pos=84.90,46.85
+Anchor=left
+BASH=~/.config/LuminaHUD/scripts/hud.py ram_line
+Refresh=5
+Font=JetBrainsMonoNerdFont-Regular
+Size=15
+Color=@text
+GlowColor=@shade
+GlowSize=5
+
+[BarBlock_l_ram_bar]
+When=env.LUMINA_THEME == 2
+Pos=91.04,46.85
+Anchor=left
+BASH=~/.config/LuminaHUD/scripts/hud.py ram
+Refresh=5
+Size=124,3
+Color=@accent
+BgColor=@track
+
+[TextBlock_l_disk]
+When=env.LUMINA_THEME == 2
+Pos=84.90,49.26
+Anchor=left
+BASH=~/.config/LuminaHUD/scripts/hud.py disk_line
+Refresh=120
+Font=JetBrainsMonoNerdFont-Regular
+Size=15
+Color=@text
+GlowColor=@shade
+GlowSize=5
+
+[BarBlock_l_disk_bar]
+When=env.LUMINA_THEME == 2
+Pos=91.04,49.26
+Anchor=left
+BASH=~/.config/LuminaHUD/scripts/hud.py disk
+Refresh=120
+Size=124,3
+Color=@accent
+BgColor=@track
+
+# ----------------------------------------------------------------------
+# 3 · néon
+# Tout est une enseigne : horloge en tube rose, titres rose et cyan, texte ombré bleu nuit.
+# ----------------------------------------------------------------------
+
+[TextBlock_n_clock]
+When=env.LUMINA_THEME == 3
+Pos=2.71,4.63
+BASH=~/.config/LuminaHUD/scripts/hud.py time
+Refresh=5
+Font=JetBrainsMonoNerdFont-Bold
+Size=104
+Color=@core
+GlowColor=@halo
+GlowSize=18
+
+[TextBlock_n_date]
+When=env.LUMINA_THEME == 3
+Pos=2.71,15.99
+BASH=~/.config/LuminaHUD/scripts/hud.py date
+Refresh=60
+Font=JetBrainsMonoNerdFont-Medium
+Size=24
+Color=@accent
+GlowColor=@halo_accent
+GlowSize=10
+
+[TextBlock_n_weather]
+When=env.LUMINA_THEME == 3
+Pos=2.71,20.81
+BASH=~/.config/LuminaHUD/scripts/hud.py weather_now
+Refresh=300
+Font=JetBrainsMonoNerdFont-Medium
+Size=38
+Color=@text
+GlowColor=@shade
+GlowSize=4
+
+[TextBlock_n_weather_desc]
+When=env.LUMINA_THEME == 3
+Pos=2.71,26.36
+BASH=~/.config/LuminaHUD/scripts/hud.py weather_desc
+Refresh=300
+Font=JetBrainsMonoNerdFont-Regular
+Size=16
+Color=@text
+GlowColor=@shade
+GlowSize=4
+
+[TextBlock_n_weather_detail]
+When=env.LUMINA_THEME == 3
+Pos=2.71,28.77
+BASH=~/.config/LuminaHUD/scripts/hud.py weather_detail
+Refresh=300
+Font=JetBrainsMonoNerdFont-Regular
+Size=16
+Color=@sub
+GlowColor=@shade
+GlowSize=4
+
+[TextBlock_n_weather_sun]
+When=env.LUMINA_THEME == 3
+Pos=2.71,31.18
+BASH=~/.config/LuminaHUD/scripts/hud.py weather_sun
+Refresh=3600
+Font=JetBrainsMonoNerdFont-Regular
+Size=16
+Color=@sub
+GlowColor=@shade
+GlowSize=4
+
+[ButtonBlock_n_forecast_1]
+When=env.LUMINA_THEME == 3 && var.forecast == 0
+Pos=3.33,34.88
+LABEL=  prévisions
+TargetVar=forecast
+Action=set
+Modifier=1
+Size=10,5
+Font=JetBrainsMonoNerdFont-Regular
+FontSize=14
+Color=@sub
+HoverColor=@accent
+BgColor=@clear
+HoverBgColor=@track
+
+[ButtonBlock_n_forecast_0]
+When=env.LUMINA_THEME == 3 && var.forecast == 1
+Pos=3.33,34.88
+LABEL=  prévisions
+TargetVar=forecast
+Action=set
+Modifier=0
+Size=10,5
+Font=JetBrainsMonoNerdFont-Regular
+FontSize=14
+Color=@sub
+HoverColor=@accent
+BgColor=@clear
+HoverBgColor=@track
+
+[TextBlock_n_forecast_day1]
+When=env.LUMINA_THEME == 3 && var.forecast == 1
+Pos=2.71,37.84
+BASH=~/.config/LuminaHUD/scripts/hud.py weather_day1
+Refresh=600
+Font=JetBrainsMonoNerdFont-Regular
+Size=15
+Color=@text
+GlowColor=@shade
+GlowSize=4
+
+[TextBlock_n_forecast_day2]
+When=env.LUMINA_THEME == 3 && var.forecast == 1
+Pos=2.71,39.97
+BASH=~/.config/LuminaHUD/scripts/hud.py weather_day2
+Refresh=600
+Font=JetBrainsMonoNerdFont-Regular
+Size=15
+Color=@text
+GlowColor=@shade
+GlowSize=4
+
+[TextBlock_n_forecast_day3]
+When=env.LUMINA_THEME == 3 && var.forecast == 1
+Pos=2.71,42.10
+BASH=~/.config/LuminaHUD/scripts/hud.py weather_day3
+Refresh=600
+Font=JetBrainsMonoNerdFont-Regular
+Size=15
+Color=@text
+GlowColor=@shade
+GlowSize=4
+
+[TextBlock_n_eddies_title]
+When=env.LUMINA_THEME == 3
+Pos=98.12,5.19
+Anchor=top-right
+TEXT=EDDIES
+Font=JetBrainsMonoNerdFont-Bold
+Size=14
+Color=@accent2
+GlowColor=@halo2
+GlowSize=8
+
+[TextBlock_n_btc]
+When=env.LUMINA_THEME == 3
+Pos=98.12,7.59
+Anchor=top-right
+BASH=~/.config/LuminaHUD/scripts/hud.py btc
+Refresh=300
+Font=JetBrainsMonoNerdFont-Regular
+Size=15
+Color=@text
+GlowColor=@shade
+GlowSize=4
+
+[TextBlock_n_eth]
+When=env.LUMINA_THEME == 3
+Pos=98.12,9.81
+Anchor=top-right
+BASH=~/.config/LuminaHUD/scripts/hud.py eth
+Refresh=300
+Font=JetBrainsMonoNerdFont-Regular
+Size=15
+Color=@text
+GlowColor=@shade
+GlowSize=4
+
+[TextBlock_n_ft_title]
+When=env.LUMINA_THEME == 3
+Pos=2.81,78.52
+TEXT=42 LYON
+Font=JetBrainsMonoNerdFont-Bold
+Size=14
+Color=@accent
+GlowColor=@halo_accent
+GlowSize=8
+
+[TextBlock_n_ft_seat]
+When=env.LUMINA_THEME == 3
+Pos=18.44,78.52
+Anchor=top-right
+BASH=~/.config/LuminaHUD/scripts/hud.py ft_seat
+Refresh=3600
+Font=JetBrainsMonoNerdFont-Regular
+Size=14
+Color=@sub
+GlowColor=@shade
+GlowSize=4
+
+[TextBlock_n_ft_level]
+When=env.LUMINA_THEME == 3
+Pos=2.81,80.93
+BASH=~/.config/LuminaHUD/scripts/hud.py ft_level
+Refresh=300
+Font=JetBrainsMonoNerdFont-Medium
+Size=16
+Color=@text
+GlowColor=@shade
+GlowSize=4
+
+[BarBlock_n_ft_level_bar]
+When=env.LUMINA_THEME == 3
+Pos=3.44,84.26
+Anchor=left
+BASH=~/.config/LuminaHUD/scripts/hud.py ft_level_pct
+Refresh=300
+Size=276,3
+Color=@accent
+BgColor=@track
+
+[TextBlock_n_ft_stats]
+When=env.LUMINA_THEME == 3
+Pos=2.81,84.81
+BASH=~/.config/LuminaHUD/scripts/hud.py ft_stats
+Refresh=300
+Font=JetBrainsMonoNerdFont-Regular
+Size=15
+Color=@text
+GlowColor=@shade
+GlowSize=4
+
+[TextBlock_n_ft_logtime]
+When=env.LUMINA_THEME == 3
+Pos=2.81,87.04
+BASH=~/.config/LuminaHUD/scripts/hud.py ft_logtime
+Refresh=300
+Font=JetBrainsMonoNerdFont-Regular
+Size=15
+Color=@text
+GlowColor=@shade
+GlowSize=4
+
+[TextBlock_n_ft_project]
+When=env.LUMINA_THEME == 3
+Pos=2.81,89.26
+BASH=~/.config/LuminaHUD/scripts/hud.py ft_project
+Refresh=300
+Font=JetBrainsMonoNerdFont-Regular
+Size=15
+Color=@sub
+GlowColor=@shade
+GlowSize=4
+
+[TextBlock_n_ft_event]
+When=env.LUMINA_THEME == 3
+Pos=2.81,91.48
+BASH=~/.config/LuminaHUD/scripts/hud.py ft_event
+Refresh=300
+Font=JetBrainsMonoNerdFont-Regular
+Size=15
+Color=@sub
+GlowColor=@shade
+GlowSize=4
+
+[TextBlock_n_sys_title]
+When=env.LUMINA_THEME == 3
+Pos=21.04,78.52
+TEXT=SYSTÈME
+Font=JetBrainsMonoNerdFont-Bold
+Size=14
+Color=@accent2
+GlowColor=@halo2
+GlowSize=8
+
+[TextBlock_n_cpu]
+When=env.LUMINA_THEME == 3
+Pos=21.04,82.22
+Anchor=left
+BASH=~/.config/LuminaHUD/scripts/hud.py cpu_line
+Refresh=5
+Font=JetBrainsMonoNerdFont-Regular
+Size=15
+Color=@text
+GlowColor=@shade
+GlowSize=4
+
+[BarBlock_n_cpu_bar]
+When=env.LUMINA_THEME == 3
+Pos=27.19,82.22
+Anchor=left
+BASH=~/.config/LuminaHUD/scripts/hud.py cpu
+Refresh=5
+Size=146,3
+Color=@accent2
+BgColor=@track
+
+[TextBlock_n_ram]
+When=env.LUMINA_THEME == 3
+Pos=21.04,84.63
+Anchor=left
+BASH=~/.config/LuminaHUD/scripts/hud.py ram_line
+Refresh=5
+Font=JetBrainsMonoNerdFont-Regular
+Size=15
+Color=@text
+GlowColor=@shade
+GlowSize=4
+
+[BarBlock_n_ram_bar]
+When=env.LUMINA_THEME == 3
+Pos=27.19,84.63
+Anchor=left
+BASH=~/.config/LuminaHUD/scripts/hud.py ram
+Refresh=5
+Size=146,3
+Color=@accent2
+BgColor=@track
+
+[TextBlock_n_disk]
+When=env.LUMINA_THEME == 3
+Pos=21.04,87.04
+Anchor=left
+BASH=~/.config/LuminaHUD/scripts/hud.py disk_line
+Refresh=120
+Font=JetBrainsMonoNerdFont-Regular
+Size=15
+Color=@text
+GlowColor=@shade
+GlowSize=4
+
+[BarBlock_n_disk_bar]
+When=env.LUMINA_THEME == 3
+Pos=27.19,87.04
+Anchor=left
+BASH=~/.config/LuminaHUD/scripts/hud.py disk
+Refresh=120
+Size=146,3
+Color=@accent2
+BgColor=@track
